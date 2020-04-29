@@ -12,7 +12,7 @@ import getLocale from './literals/getLocale'
  * @param {import('./types').LocalizationStateOptions} options
  * @returns {import('./types').LocalizationObservable}
  */
-function factoryLocalizationState(options) {
+function factoryI18nState(options) {
   const {
     clearNamespace = getNamespace,
     defaultLocale = getLocale(),
@@ -74,11 +74,11 @@ function factoryLocalizationState(options) {
 
   function EmbeddedStateLiteral(config) {
     const configValues = config || {}
-    const localizationState = get(configValues, 'props.localizationState')
+    const i18nState = get(configValues, 'props.i18nState')
     const initConfig = set(
       configValues,
-      'props.localizationState',
-      localizationState || observableState,
+      'props.i18nState',
+      i18nState || observableState,
     )
     return new Literal(initConfig)
   }
@@ -87,4 +87,4 @@ function factoryLocalizationState(options) {
   return observableState
 }
 
-export default factoryLocalizationState
+export default factoryI18nState

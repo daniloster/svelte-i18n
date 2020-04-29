@@ -2,18 +2,18 @@
   import { onMount, onDestroy, setContext } from 'svelte'
   import PageOne from './PageOne'
   import PageTwo from './PageTwo'
-  import localizationState from './localizationState'
+  import i18nState from './i18nState'
   
-  const Literal = localizationState.Literal
-  setContext('i18n', localizationState)
+  const Literal = i18nState.Literal
+  setContext('i18n', i18nState)
   setContext('I18nLiteral', Literal)
 
   const onEnglish = () => {
-    localizationState.setLocale('en')
+    i18nState.setLocale('en')
   }
 
   const onPortuguese = () => {
-    localizationState.setLocale('pt-BR')
+    i18nState.setLocale('pt-BR')
   }
 </script>
 

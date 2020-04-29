@@ -5,7 +5,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import { cleanup } from '@testing-library/svelte'
 import { noop } from 'svelte/internal'
-import localizationState from '../../DEV/localizationState'
+import i18nState from '../../DEV/i18nState'
 import mockMutationObserver from './mockMutationObserver'
 import mockNavigator from './mockNavigator'
 
@@ -15,5 +15,5 @@ beforeEach(() => {
   mockMutationObserver()
   mockNavigator()
   HTMLElement.prototype.scrollIntoView = noop
-  localizationState.setLocale('en')
+  i18nState.setLocale('en')
 })
