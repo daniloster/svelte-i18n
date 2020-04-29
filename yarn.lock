@@ -6718,7 +6718,7 @@ svelte-dev-helper@^1.1.9:
   resolved "https://registry.yarnpkg.com/svelte-dev-helper/-/svelte-dev-helper-1.1.9.tgz#7d187db5c6cdbbd64d75a32f91b8998bde3273c3"
   integrity sha1-fRh9tcbNu9ZNdaMvkbiZi94yc8M=
 
-svelte-jester@^1.0.5:
+svelte-jester@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/svelte-jester/-/svelte-jester-1.0.5.tgz#92ebface1446cff79bb1ad95e8185da749067780"
   integrity sha512-UVQNYXHw1ujoPjSVwKES9bT4LPaZlWulW3rRE0rFXnRDrWt58BpxQxpcixGBpIsE0y6D5QMiCoFoMQOSkar+zg==

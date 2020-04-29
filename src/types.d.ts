@@ -34,6 +34,7 @@ export interface PersistanceService {
 }
 
 export interface LocalizationStateOptions {
+  clearNamespace(namespace: string): string
   initialLocale: string
   defaultLocale: string
   locales: Object

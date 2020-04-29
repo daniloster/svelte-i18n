@@ -1,19 +1,19 @@
 import { fireEvent, render } from '@testing-library/svelte'
 import AppForTest from '../DEV/AppForTest'
-import factoryLocalizationState from './factoryLocalizationState'
+import factoryI18nState from './factoryI18nState'
 
 describe('I18n', () => {
-  test('if factoryLocalizationState handles no arguments', () => {
-    const localizationState = factoryLocalizationState()
-    localizationState.init()
-    expect(localizationState).toBeTruthy()
+  test('if factoryI18nState handles no arguments', () => {
+    const i18nState = factoryI18nState()
+    i18nState.init()
+    expect(i18nState).toBeTruthy()
   })
 
-  test('if factoryLocalizationState allow user to set value', () => {
+  test('if factoryI18nState allow user to set value', () => {
     const persistence = { set: jest.fn(), get: jest.fn() }
-    const localizationState = factoryLocalizationState({ persistence })
+    const i18nState = factoryI18nState({ persistence })
 
-    localizationState.set({
+    i18nState.set({
       locale: 'test',
       defaultLocale: 'test2',
       locales: {},
@@ -24,11 +24,11 @@ describe('I18n', () => {
     expect(persistence.set).toHaveBeenCalledWith('test')
   })
 
-  test('if factoryLocalizationState does not propagate locale to persistence on set when is not valid', () => {
+  test('if factoryI18nState does not propagate locale to persistence on set when is not valid', () => {
     const persistence = { set: jest.fn(), get: jest.fn() }
-    const localizationState = factoryLocalizationState({ persistence })
+    const i18nState = factoryI18nState({ persistence })
 
-    localizationState.set({
+    i18nState.set({
       locale: null,
       defaultLocale: 'test2',
       locales: {},
@@ -37,18 +37,18 @@ describe('I18n', () => {
     expect(persistence.set).not.toHaveBeenCalled()
   })
 
-  test('if factoryLocalizationState does extend locales (es-ES)', () => {
-    const localizationState = factoryLocalizationState()
+  test('if factoryI18nState does extend locales (es-ES)', () => {
+    const i18nState = factoryI18nState()
 
-    localizationState.extend({
+    i18nState.extend({
       'es-ES': {
         PageOne: {
           hello: 'Holla',
         },
       },
     })
-    localizationState.setLocale('es-ES')
-    const wrapper = render(localizationState.Literal, { path: 'PageOne.hello' })
+    i18nState.setLocale('es-ES')
+    const wrapper = render(i18nState.Literal, { path: 'PageOne.hello' })
 
     expect(wrapper.container.textContent).toEqual('Holla')
   })

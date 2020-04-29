@@ -1,3 +1,3 @@
-import factoryLocalizationState from './factoryLocalizationState'
+import factoryI18nState from './factoryI18nState'
 
-export default factoryLocalizationState
+export default factoryI18nState

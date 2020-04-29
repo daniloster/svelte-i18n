@@ -2,16 +2,16 @@
 import Html from './literals/wrappers/Html'
 import CustomComponent from './literals/wrappers/CustomComponent'
 
-export let localizationState = null
+export let i18nState = null
 export let namespace = undefined
 export let path = ''
 export let modifiers = {}
 
-if (!localizationState) {
-  throw new Error(`Literal requires {localizationState} to be passed as property.`)
+if (!i18nState) {
+  throw new Error(`Literal requires {i18nState} to be passed as property.`)
 }
 
-$: resolvers = localizationState.resolvers(namespace)
+$: resolvers = i18nState.resolvers(namespace)
 $: nodes = $resolvers.nodes(path, modifiers)
 </script>
 

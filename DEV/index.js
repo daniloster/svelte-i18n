@@ -1,8 +1,8 @@
 import '@babel/polyfill'
 import App from './App.svelte'
-import localizationState from './localizationState'
+import i18nState from './i18nState'
 
-localizationState.init()
+i18nState.init()
 
 window.addEventListener('DOMContentLoaded', () => {
   const root = document.createElement('div')

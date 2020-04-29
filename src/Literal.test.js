@@ -1,14 +1,14 @@
 import { render } from '@testing-library/svelte'
 import { get, set } from 'mutation-helper'
-import localizationState from '../DEV/localizationState'
+import i18nState from '../DEV/i18nState'
 import Literal from './Literal'
 
 function I18nLiteral(config) {
-  const initialLocalizationState = get(config || {}, 'props.localizationState')
+  const initialLocalizationState = get(config || {}, 'props.i18nState')
   const initConfig = set(
     config || {},
-    'props.localizationState',
-    initialLocalizationState === null ? undefined : localizationState,
+    'props.i18nState',
+    initialLocalizationState === null ? undefined : i18nState,
   )
   return new Literal(initConfig)
 }
@@ -19,13 +19,13 @@ describe('Literal', () => {
     expect(wrapper.container.textContent).toEqual('')
   })
 
-  test('if Literal throws error for localizationState as null', async () => {
+  test('if Literal throws error for i18nState as null', async () => {
     try {
-      render(I18nLiteral, { localizationState: null })
+      render(I18nLiteral, { i18nState: null })
       expect(true).toEqual(false)
     } catch (e) {
       expect(e.message).toEqual(
-        'Literal requires {localizationState} to be passed as property.',
+        'Literal requires {i18nState} to be passed as property.',
       )
     }
   })

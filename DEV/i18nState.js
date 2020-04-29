@@ -1,8 +1,8 @@
-import factoryLocalizationState from '../src'
+import factoryI18nState from '../src'
 import en from './assets/locales/en'
 import ptBR from './assets/locales/pt-BR'
 
-const localizationState = factoryLocalizationState({
+const i18nState = factoryI18nState({
   defaultLocale: 'en',
   locales: {
     en,
@@ -14,4 +14,4 @@ const localizationState = factoryLocalizationState({
   },
 })
 
-export default localizationState
+export default i18nState
