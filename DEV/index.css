@@ -1,0 +1,21 @@
+html {
+  color: rgba(5, 5, 5, 0.8);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+body {
+    margin: 0px;
+    height: 100vh;
+    color: rgba(5, 5, 5, 0.8);
+}
+
+body.noScroll,
+body.noScroll #app {
+  overflow-y: hidden;
+}
+
+#app {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 100vh;
+}
