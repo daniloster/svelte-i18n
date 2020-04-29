@@ -3,6 +3,15 @@
   "version": "0.0.1",
   "description": "Library to apply internationalization with interpolation of strings and components",
   "main": "lib/main.js",
+  "license": "MIT",
+  "repository": "https://github.com/daniloster/svelte-i18n.git",
+  "author": "Danilo Castro <daniloster@gmail.com>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=10.20.0"
+  },
   "scripts": {
     "build": "NODE_ENV=production webpack --config tools/webpack/webpack.svelte.config.js --mode production",
     "dev": "NODE_ENV=development webpack-dev-server --config tools/webpack/webpack.svelte.config.js --mode development",
@@ -11,16 +20,12 @@
     "test:coverage": "cross-env NODE_ENV=test jest --config jest.config.coverage.js",
     "prerelease": "yarn build"
   },
-  "repository": {
-    "url": "https://github.com/daniloster/svelte-i18n"
-  },
   "keywords": [
     "Svelte",
     "i18n",
     "component",
     "library"
   ],
-  "author": "daniloster",
   "devDependencies": {
     "@babel/core": "7.8.7",
     "@babel/plugin-proposal-class-properties": "7.8.3",
@@ -51,9 +56,6 @@
     "webpack-cli": "3.3.11",
     "webpack-dev-server": "3.10.3",
     "worker-plugin": "4.0.2"
-  },
-  "optionalDependencies": {
-    "appdmg": "0.6.0"
   },
   "dependencies": {
     "mutation-helper": "1.0.0",
