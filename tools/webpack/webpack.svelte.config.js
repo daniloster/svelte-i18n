@@ -63,7 +63,7 @@ module.exports = {
       historyApiFallback: true,
       compress: true,
       hot: true,
-      port: 4000,
+      port: 4001,
       publicPath: '/',
     },
   }),

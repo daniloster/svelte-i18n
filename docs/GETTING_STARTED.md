@@ -16,6 +16,8 @@ const en = {
       hello: 'Hello {name}.',
       description: 'You are more than welcome.',
       interpolation: 'In here, we have an interpolation for you, <user>.',
+      buttonLabel: 'Click',
+      buttonTitle: 'Click me',
     },
   },
 }
@@ -25,6 +27,8 @@ const ptBR = {
       hello: 'Ola, {name}.',
       description: 'Vc eh mais do que bem-vindo.',
       interpolation: 'Aqui, teremos uma interpolacao para vc, <user>.',
+      buttonLabel: 'Clique',
+      buttonTitle: 'Clique me',
     },
   },
 }
@@ -114,11 +118,19 @@ _`src/containers/Page.svelte`_
   // for this work, we need webpack to have `exports.module = { node: { filename: true }, ...otherConfigs }
   const namespace = __filename
   const Literal = getContext('I18nLiteral')
+  const i18nState = getContext('i18n')
 
   let name = 'Awesomeness'
+
+  $: resolvers = i18nState.resolvers(namespace)
+  $: text = $resolvers.text
 </script>
 
 <div>
+  <button type="button" title="{text('buttonTitle')}">
+    <Literal {namespace} path="buttonLabel" />
+  </button>
+  <br />
   <input type="text" bind:value="{name}" />
   <p>
     <Literal {namespace} path="hello" modifiers="{{ name }}" />
