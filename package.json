@@ -2,7 +2,7 @@
   "name": "@daniloster/svelte-i18n",
   "version": "0.0.3",
   "description": "Library to apply internationalization with interpolation of strings and components",
-  "main": "lib/main.js",
+  "main": "lib/index.js",
   "license": "MIT",
   "repository": "https://github.com/daniloster/svelte-i18n.git",
   "author": "Danilo Castro <daniloster@gmail.com>",
@@ -13,7 +13,9 @@
     "node": ">=10.20.0"
   },
   "scripts": {
-    "build": "NODE_ENV=production webpack --config tools/webpack/webpack.svelte.config.js --mode production",
+    "prebuild": "rm -rf lib",
+    "build": "babel src --out-dir lib --source-maps --ignore **/*.test.js --copy-files --no-copy-ignored",
+    "postbuild": "rm -rf lib/**/*.test.* && rm -rf lib/*.test.*",
     "dev": "NODE_ENV=development webpack-dev-server --config tools/webpack/webpack.svelte.config.js --mode development",
     "test": "cross-env NODE_ENV=test jest --config jest.config.js",
     "pretest:coverage": "rm -rf ./.database",
@@ -27,6 +29,7 @@
     "library"
   ],
   "devDependencies": {
+    "@babel/cli": "7.8.4",
     "@babel/core": "7.8.7",
     "@babel/plugin-proposal-class-properties": "7.8.3",
     "@babel/plugin-proposal-export-namespace-from": "7.8.3",
@@ -49,6 +52,7 @@
     "prettier": "2.0.5",
     "prettier-plugin-svelte": "0.7.0",
     "source-map-support": "0.5.16",
+    "svelte": "3.21.0",
     "svelte-jester": "1.0.5",
     "svelte-loader": "2.13.6",
     "url-loader": "4.1.0",
@@ -58,7 +62,6 @@
     "worker-plugin": "4.0.2"
   },
   "dependencies": {
-    "mutation-helper": "1.0.0",
-    "svelte": "3.21.0"
+    "mutation-helper": "1.0.0"
   }
 }

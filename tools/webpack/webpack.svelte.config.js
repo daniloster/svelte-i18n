@@ -2,11 +2,9 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WorkerPlugin = require('worker-plugin')
 
-const isProd = !['development', 'test'].includes(process.env.NODE_ENV)
-
 module.exports = {
-  entry: isProd ? './src/index.js' : './DEV/index.js',
-  target: isProd ? 'node' : 'web',
+  entry: './DEV/index.js',
+  target: 'web',
   devtool: 'source-map',
   node: {
     global: false,
@@ -34,9 +32,7 @@ module.exports = {
         exclude: /node_modules/,
         use: {
           loader: 'svelte-loader',
-          options: {
-            // hotReload: !isProd,
-          },
+          options: {},
         },
       },
       {
@@ -57,31 +53,21 @@ module.exports = {
       },
     ],
   },
-  ...(!isProd && {
-    devServer: {
-      contentBase: path.join(__dirname, '../../dist/.app/'),
-      historyApiFallback: true,
-      compress: true,
-      hot: true,
-      port: 4001,
-      publicPath: '/',
-    },
-  }),
-  output: isProd
-    ? {
-        path: path.resolve(__dirname, '../../lib/'),
-        library: 'MyLibrary',
-        libraryTarget: 'umd',
-      }
-    : {
-        path: path.resolve(__dirname, '../../dist/.app/'),
-        filename: 'index.js',
-        publicPath: './',
-      },
-  plugins: isProd
-    ? []
-    : [
-        new WorkerPlugin(),
-        new HtmlWebpackPlugin({ title: 'Shopping Builder' }),
-      ],
+  devServer: {
+    contentBase: path.join(__dirname, '../../dist/.app/'),
+    historyApiFallback: true,
+    compress: true,
+    hot: true,
+    port: 4001,
+    publicPath: '/',
+  },
+  output: {
+    path: path.resolve(__dirname, '../../dist/.app/'),
+    filename: 'index.js',
+    publicPath: './',
+  },
+  plugins: [
+    new WorkerPlugin(),
+    new HtmlWebpackPlugin({ title: 'Shopping Builder' }),
+  ],
 }
