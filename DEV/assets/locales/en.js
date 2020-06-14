@@ -2,16 +2,15 @@
 export default {
   PageOne: {
     hello: 'Hello World',
-    interpolation: 'Hello World <decorator>, {name}',
+    interpolation: 'Hello World <decorator>{name}</decorator>.',
   },
   PageTwo: {
     hello: '[2] Hello World',
-    interpolation: '[2] Hello World <decorator>, {name}',
+    interpolation: '[2] Hello World <decorator>{name}</decorator>.',
     description:
-      '[2] This is an example of interpolation with custom components. For more information, you may <action>',
+      '[2] This is an example of interpolation with custom components.<breakline />For more information, you may <action>CLICK</action>',
     action: {
       message: '[2] Hello "{name}", you clicked on the button',
-      label: '[2] CLICK',
     },
   },
 }

@@ -1,6 +1,6 @@
 export default class CustomComponent {
-  constructor(Component, props) {
+  constructor(Component, props, children) {
     this.Component = Component
-    this.props = props
+    this.props = children ? { children, ...props } : props
   }
 }

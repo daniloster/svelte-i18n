@@ -1,31 +1,27 @@
 import { get, set } from 'mutation-helper'
 import { noop } from 'svelte/internal'
 import { readable } from 'svelte/store'
-import factoryResolvers from './factoryResolvers'
-import factoryStates from './factoryStates'
-import getNamespace from './getNamespace'
-import Literal from './Literal.svelte'
-import getLocale from './literals/getLocale'
+import factoryStates from '../factoryStates'
+import getNamespace from '../getNamespace'
+import Literal from '../Literal.svelte'
+import factoryResolversI18next from './factoryResolversI18next'
 
 /**
  * Factories a localization state with resolvers and Literal component
- * @param {import('./types').LocalizationStateOptions} options
- * @returns {import('./types').LocalizationObservable}
+ * @param {import('../types').LocalizationI18nextStateOptions} options
+ * @returns {import('../types').LocalizationObservable}
  */
-function factoryI18nState(options) {
+function factoryI18nextState(options) {
   const {
     clearNamespace = getNamespace,
-    defaultLocale = getLocale(),
-    initialLocale = defaultLocale,
-    locales = {},
+    i18n,
     persistence = { get: noop, set: noop },
   } = options || {}
 
   const state = factoryStates({
-    defaultLocale,
-    locale: initialLocale,
-    locales,
-    languages: Object.keys(locales),
+    i18n,
+    locale: i18n.options.language,
+    languages: i18n.options.languages,
   })
 
   const observableState = {
@@ -45,30 +41,45 @@ function factoryI18nState(options) {
       })
     },
     setLocale: (locale) => {
-      observableState.update((old) => ({ ...old, locale }))
+      observableState.update((old) => {
+        old.i18n.changeLanguage(locale)
+        return { ...old, locale }
+      })
     },
     extend: (locales) => {
-      state.update((old) => ({
-        ...old,
-        locales: {
-          ...old.locales,
-          ...locales,
-        },
-      }))
+      state.update((old) => {
+        Object.entries(locales).forEach(([language, resource]) => {
+          old.i18n.addResourceBundle(
+            language,
+            'translation',
+            resource,
+            true,
+            true,
+          )
+        })
+
+        return {
+          ...old,
+          languages: old.i18n.options.languages,
+        }
+      })
     },
     resolvers: (filename) => {
       const namespace = clearNamespace(filename)
-      const initialStateResolvers = factoryResolvers(namespace, state.get())
+      const initialStateResolvers = factoryResolversI18next(
+        namespace,
+        state.get(),
+      )
       const getter = readable(initialStateResolvers, (set) => {
         getter.unsubscribe = state.subscribe((newState) => {
-          set(factoryResolvers(namespace, newState))
+          set(factoryResolversI18next(namespace, newState))
         })
       })
 
       return getter
     },
     init: () => {
-      const initialLocaleUnified = persistence.get() || initialLocale
+      const initialLocaleUnified = persistence.get() || i18n.options.lng
       observableState.setLocale(initialLocaleUnified)
     },
   }
@@ -88,4 +99,4 @@ function factoryI18nState(options) {
   return observableState
 }
 
-export default factoryI18nState
+export default factoryI18nextState

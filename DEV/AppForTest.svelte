@@ -3,17 +3,22 @@
   import PageOne from './PageOne'
   import PageTwo from './PageTwo'
   import i18nState from './i18nState'
+  import i18nextState from './i18nextState'
   
-  const Literal = i18nState.Literal
-  setContext('i18n', i18nState)
+  export let isI18n = false
+
+  const i18n = isI18n ? i18nextState : i18nState
+
+  const Literal = i18n.Literal
+  setContext('i18n', i18n)
   setContext('I18nLiteral', Literal)
 
   const onEnglish = () => {
-    i18nState.setLocale('en')
+    i18n.setLocale('en')
   }
 
   const onPortuguese = () => {
-    i18nState.setLocale('pt-BR')
+    i18n.setLocale('pt-BR')
   }
 </script>
 

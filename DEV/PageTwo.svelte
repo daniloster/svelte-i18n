@@ -34,10 +34,10 @@
           action: [
             AddEventAlert,
             {
-              children: $i18n.text('action.label'),
               message: $i18n.text('action.message', { name })
             }
-          ]
+          ],
+          breakline: { tag: 'br' }
         }}"
       />
     </p>

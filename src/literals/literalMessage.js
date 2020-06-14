@@ -1,4 +1,5 @@
 import { get } from 'mutation-helper'
+import interpolateText from './interpolateText'
 
 const DEFAULT_MODIFIERS = {}
 /**
@@ -19,15 +20,8 @@ export default function literalMessage(
     return null
   }
 
-  const keys = Object.keys(modifiers)
   const templateMessage =
     get(messages, jsonPath) || get(defaultMessages, jsonPath)
 
-  return keys.reduce(
-    (message, key) =>
-      message
-        ? message.replace(new RegExp(`{${key}}`, 'g'), modifiers[key])
-        : message,
-    templateMessage,
-  )
+  return interpolateText(templateMessage, modifiers) || ''
 }

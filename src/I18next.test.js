@@ -1,17 +1,38 @@
 import { fireEvent, render } from '@testing-library/svelte'
+import i18n from 'i18next'
 import AppForTest from '../DEV/AppForTest'
-import factoryI18nState from './factoryI18nState'
+import en from '../DEV/assets/locales/en'
+import ptBR from '../DEV/assets/locales/pt-BR'
+import factoryI18nextState from './i18next/factoryI18nextState'
+
+i18n.init({
+  fallbackLng: 'en',
+  languages: ['en', 'pt-BR'],
+  language: 'en',
+  resources: {
+    en: {
+      translation: en,
+    },
+    'pt-BR': {
+      translation: ptBR,
+    },
+  },
+})
 
 describe('I18n', () => {
-  test('if factoryI18nState handles no arguments', () => {
-    const i18nState = factoryI18nState()
+  beforeEach(() => {
+    i18n.changeLanguage('en')
+  })
+
+  test('if factoryI18nextState handles no arguments', () => {
+    const i18nState = factoryI18nextState({ i18n })
     i18nState.init()
     expect(i18nState).toBeTruthy()
   })
 
-  test('if factoryI18nState allow user to set value', () => {
+  test('if factoryI18nextState allow user to set value', () => {
     const persistence = { set: jest.fn(), get: jest.fn() }
-    const i18nState = factoryI18nState({ persistence })
+    const i18nState = factoryI18nextState({ i18n, persistence })
 
     i18nState.set({
       locale: 'test',
@@ -24,9 +45,9 @@ describe('I18n', () => {
     expect(persistence.set).toHaveBeenCalledWith('test')
   })
 
-  test('if factoryI18nState does not propagate locale to persistence on set when is not valid', () => {
+  test('if factoryI18nextState does not propagate locale to persistence on set when is not valid', () => {
     const persistence = { set: jest.fn(), get: jest.fn() }
-    const i18nState = factoryI18nState({ persistence })
+    const i18nState = factoryI18nextState({ i18n, persistence })
 
     i18nState.set({
       locale: null,
@@ -37,8 +58,8 @@ describe('I18n', () => {
     expect(persistence.set).not.toHaveBeenCalled()
   })
 
-  test('if factoryI18nState does extend locales (es-ES)', () => {
-    const i18nState = factoryI18nState()
+  test('if factoryI18nextState does extend locales (es-ES)', () => {
+    const i18nState = factoryI18nextState({ i18n })
 
     i18nState.extend({
       'es-ES': {
@@ -54,9 +75,7 @@ describe('I18n', () => {
   })
 
   test('if I18n presents the text with initial locale', async () => {
-    const wrapper = render(AppForTest)
-    fireEvent.click(await wrapper.findByText('English'))
-
+    const wrapper = render(AppForTest, { isI18n: true })
     /** PageOne */
     const hello = await wrapper.findByText('Hello World')
     expect(hello).toBeTruthy()
@@ -95,7 +114,7 @@ describe('I18n', () => {
   })
 
   test('if I18n changes the texts for pt-BR', async () => {
-    const wrapper = render(AppForTest)
+    const wrapper = render(AppForTest, { isI18n: true })
     fireEvent.click(await wrapper.findByText('Portugues'))
 
     /** PageOne */
