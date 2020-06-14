@@ -2,6 +2,8 @@
 
 The usage of `@daniloster/svelte-i18n` is based on some conventions which can speed up development experience.
 
+[Example of Application under DEV folder](https://github.com/daniloster/svelte-i18n/tree/master/DEV)
+
 ## Importing and using
 
 The library only exposes one function and the configuration has default values set in case they are not provided.
