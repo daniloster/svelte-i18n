@@ -3,16 +3,24 @@
   import PageOne from './PageOne'
   import PageTwo from './PageTwo'
   import i18nState from './i18nState'
+
+  import i18nextState from './i18nextState'
   
   const namespace = __filename
 
   let intervalRef = null
+  
+  /**
+   * You can choose what is the state you are going to use here
+   * */
+  let i18n = i18nState
+  // let i18n = i18nextState
+
   onMount(() => {
-    const locales = Object.keys(i18nState.get().locales)
+    const locales = i18n.get().languages
     let indexLocale = 0
     intervalRef = setInterval(() => {
-      console.log({ locale: locales[indexLocale] })
-      i18nState.setLocale(locales[indexLocale])
+      i18n.setLocale(locales[indexLocale])
       indexLocale = (indexLocale + 1) % locales.length
     }, 5000)
   })
@@ -21,8 +29,8 @@
     clearInterval(intervalRef)
   })
 
-  const Literal = i18nState.Literal
-  setContext('i18n', i18nState)
+  const Literal = i18n.Literal
+  setContext('i18n', i18n)
   setContext('I18nLiteral', Literal)
 </script>
 

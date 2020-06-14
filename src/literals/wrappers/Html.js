@@ -1,9 +1,14 @@
 export default class Html {
-  constructor(value) {
-    this.value = value
-  }
-
-  toString() {
-    return this.value
+  /**
+   * @param {{ tag: string, attrs: Array<string> }} props
+   * @param {string} children
+   */
+  constructor(props, children) {
+    this.props = {
+      ...(!!children && { children }),
+      attrs: [],
+      tag: 'span',
+      ...props,
+    }
   }
 }

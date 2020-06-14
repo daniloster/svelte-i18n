@@ -2,16 +2,15 @@
 export default {
   PageOne: {
     hello: 'Ola Mundo',
-    interpolation: 'Ola Mundo <decorator>, {name}',
+    interpolation: 'Ola Mundo <decorator>{name}</decorator>!',
   },
   PageTwo: {
     hello: '[2] Ola Mundo',
-    interpolation: '[2] Ola Mundo <decorator>, {name}',
+    interpolation: '[2] Ola Mundo <decorator>{name}</decorator>!',
     description:
-      '[2] Este eh um exemplo de interpolacao com component customizado. Para mais informacoes, vc pode accessar <action>',
+      '[2] Este eh um exemplo de interpolacao com component customizado.<breakline />Para mais informacoes, vc pode accessar <action>AQUI</action>',
     action: {
       message: '[2] Oi "{name}", vc clicou no botao',
-      label: '[2] AQUI',
     },
   },
 }

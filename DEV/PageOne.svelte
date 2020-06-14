@@ -13,7 +13,7 @@
     <Literal
       {namespace}
       path="interpolation"
-      modifiers="{{ name: 'Super User', decorator: '<b>Testing One</b>' }}"
+      modifiers="{{ name: 'Super User', decorator: { tag: 'b' } }}"
     />
   </p>
 </div>

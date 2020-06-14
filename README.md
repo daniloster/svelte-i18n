@@ -9,6 +9,10 @@
   - [Steps](#Steps)
   - [Dev](#Dev)
 
+## IE Polyfills
+
+- [string.prototype.matchall](https://www.npmjs.com/package/string.prototype.matchall)
+
 ## Contributions
 
 Feel free to reach out and help improving this library.

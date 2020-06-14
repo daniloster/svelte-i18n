@@ -41,6 +41,12 @@ export interface LocalizationStateOptions {
   persistence: PersistanceService
 }
 
+export interface LocalizationI18nextStateOptions {
+  clearNamespace(namespace: string): string
+  i18n: { t: (key: string) => string }
+  persistence: PersistanceService
+}
+
 export interface LocalizationObservable {
   subscribe(fn: LocalizationObservableSubscriber): Function
   set(state: LocalizationState): void
@@ -50,4 +56,18 @@ export interface LocalizationObservable {
   extend(locales: Object): void
   init(): Promise<void>
   Literal: Literal
+}
+
+export interface MarkupGroupValue extends Array {
+  done: boolean
+  value: {
+    groups: { tag: string; selfClosing: string }
+    index: number
+    input: string
+    length: number
+  }
+}
+
+export interface MarkupGroupsTag {
+  next(): MarkupGroupValue
 }
