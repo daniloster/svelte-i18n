@@ -1,6 +1,6 @@
 {
   "name": "@daniloster/svelte-i18n",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Library to apply internationalization with interpolation of strings and components",
   "main": "lib/index.js",
   "license": "MIT",
