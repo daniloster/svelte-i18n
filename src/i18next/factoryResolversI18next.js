@@ -13,7 +13,15 @@ function factoryResolver(type, namespace, currentState) {
   const resolver = resolvers[type]
   const prefixNamespace = namespace ? namespace + '.' : ''
   return (path, modifiers) => {
-    const template = currentState.i18n.t(prefixNamespace + path)
+    const parts = prefixNamespace.split(currentState.nsSeparator)
+    const i18nNS = parts.length > 1 ? parts[0] : currentState.defaultNamespace
+    const template = currentState.i18n.hasResourceBundle(
+      currentState.locale,
+      i18nNS,
+    )
+      ? currentState.i18n.t(prefixNamespace + path)
+      : parts.pop() + path
+
     const fragments = resolver(template, modifiers)
 
     return fragments

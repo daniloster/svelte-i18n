@@ -5,6 +5,7 @@ import { factoryI18nextState } from '../src'
 i18n
   .use(HttpApi)
   .init({
+    debug: true,
     fallbackLng: 'en',
     fallbackNS: 'translation',
     languages: ['en', 'pt-BR', 'es'],
