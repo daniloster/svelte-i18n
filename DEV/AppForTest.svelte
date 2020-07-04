@@ -2,23 +2,18 @@
   import { onMount, onDestroy, setContext } from 'svelte'
   import PageOne from './PageOne'
   import PageTwo from './PageTwo'
-  import i18nState from './i18nState'
-  import i18nextState from './i18nextState'
+  import PageCommon from './PageCommon'
   
-  export let isI18n = false
+  export let state = null
 
-  const i18n = isI18n ? i18nextState : i18nState
+  const i18n = state
 
   const Literal = i18n.Literal
   setContext('i18n', i18n)
   setContext('I18nLiteral', Literal)
 
-  const onEnglish = () => {
-    i18n.setLocale('en')
-  }
-
-  const onPortuguese = () => {
-    i18n.setLocale('pt-BR')
+  const setLocale = (locale) => {
+    i18n.setLocale(locale)
   }
 </script>
 
@@ -26,10 +21,14 @@
 </style>
 
 <svelte>
-  <button type="button" on:click={onEnglish} data-testid="en">English</button>
-  <button type="button" on:click={onPortuguese} data-testid="pt-BR">Portugues</button>
+  <button type="button" on:click={() => setLocale('en')}>en: translation</button>
+  <button type="button" on:click={() => setLocale('pt-BR')}>pt: translation</button>
+  <button type="button" on:click={() => setLocale('es')}>es: translation</button>
+  <button type="button" on:click={() => setLocale('jp')}>jp: translation</button>
   <hr />
   <PageOne />
   <hr />
   <PageTwo />
+  <hr />
+  <PageCommon />
 </svelte>

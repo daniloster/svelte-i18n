@@ -1,6 +1,26 @@
 import { fireEvent, render } from '@testing-library/svelte'
 import AppForTest from '../DEV/AppForTest'
+import en from '../DEV/assets/locales/en'
+import ptBR from '../DEV/assets/locales/pt-BR'
 import factoryI18nState from './factoryI18nState'
+
+function getAppForTestOptions() {
+  return {
+    props: {
+      state: factoryI18nState({
+        defaultLocale: 'en',
+        locales: {
+          en,
+          'pt-BR': ptBR,
+        },
+        persistence: {
+          get: () => localStorage.getItem('locale'),
+          set: (locale) => localStorage.getItem('locale', locale),
+        },
+      }),
+    },
+  }
+}
 
 describe('I18n', () => {
   test('if factoryI18nState handles no arguments', () => {
@@ -54,8 +74,8 @@ describe('I18n', () => {
   })
 
   test('if I18n presents the text with initial locale', async () => {
-    const wrapper = render(AppForTest)
-    fireEvent.click(await wrapper.findByText('English'))
+    const wrapper = render(AppForTest, getAppForTestOptions())
+    fireEvent.click(await wrapper.findByText('en: translation'))
 
     /** PageOne */
     const hello = await wrapper.findByText('Hello World')
@@ -95,8 +115,8 @@ describe('I18n', () => {
   })
 
   test('if I18n changes the texts for pt-BR', async () => {
-    const wrapper = render(AppForTest)
-    fireEvent.click(await wrapper.findByText('Portugues'))
+    const wrapper = render(AppForTest, getAppForTestOptions())
+    fireEvent.click(await wrapper.findByText('pt: translation'))
 
     /** PageOne */
     const hello = await wrapper.findByText('Ola Mundo')

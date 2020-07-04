@@ -1,0 +1,10 @@
+{
+  "PageCommon": {
+    "hello": "[common] [2] Hello World",
+    "interpolation": "[common] [2] Hello World <decorator>{name}</decorator>.",
+    "description": "[common] [2] This is an example of interpolation with custom components.<breakline />For more information, you may <action>CLICK</action>",
+    "action": {
+      "message": "[common] [2] Hello \"{name}\", you clicked on the button"
+    }
+  }
+}

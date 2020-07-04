@@ -13,7 +13,7 @@ function factoryResolver(type, namespace, currentState) {
   const resolver = resolvers[type]
   const prefixNamespace = namespace ? namespace + '.' : ''
   return (path, modifiers) => {
-    const template = currentState.i18n.t(`${prefixNamespace}${path}`)
+    const template = currentState.i18n.t(prefixNamespace + path)
     const fragments = resolver(template, modifiers)
 
     return fragments

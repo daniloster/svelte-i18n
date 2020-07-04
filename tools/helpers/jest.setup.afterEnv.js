@@ -7,12 +7,12 @@ import { cleanup } from '@testing-library/svelte'
 import matchAll from 'string.prototype.matchall'
 import { noop } from 'svelte/internal'
 import i18nState from '../../DEV/i18nState'
+import startMirage from '../../DEV/__mocks__/startMirage'
 import mockMutationObserver from './mockMutationObserver'
 import mockNavigator from './mockNavigator'
 
-afterEach(cleanup)
-
 beforeEach(() => {
+  global.server = startMirage('test')
   String.prototype.matchAll = function (...args) {
     let pointerIndex = -1
     const groups = matchAll(this, ...args)
@@ -39,4 +39,10 @@ beforeEach(() => {
   mockNavigator()
   HTMLElement.prototype.scrollIntoView = noop
   i18nState.setLocale('en')
+})
+
+afterEach(() => {
+  global.server.shutdown()
+  cleanup()
+  jest.useRealTimers()
 })
