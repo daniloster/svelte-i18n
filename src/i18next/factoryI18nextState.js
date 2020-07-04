@@ -142,15 +142,6 @@ function factoryI18nextState(options) {
     },
     init: () => {
       return new Promise((resolve, reject) => {
-        console.log({
-          language: i18n.language,
-          languages: i18n.languages,
-          options: {
-            language: i18n.options.language,
-            languages: i18n.options.languages,
-          },
-        })
-
         state.update((oldState) => {
           const locale = persistence.get() || getI18nLanguage(i18n)
 
