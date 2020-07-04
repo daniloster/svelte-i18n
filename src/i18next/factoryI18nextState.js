@@ -31,7 +31,7 @@ function factoryI18nextState(options) {
   const state = factoryStates({
     i18n,
     i18nAsyncStatus,
-    locale: i18n.options.language,
+    locale: [].concat(i18n.options.language || i18n.options.languages).shift(),
     languages: i18n.options.languages,
   })
 
