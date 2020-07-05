@@ -6,7 +6,7 @@
 </script>
 
 <div>
-  <p>
+  <p data-testid="hello">
     <Literal {namespace} path="hello" />
   </p>
   <p data-testid="PageOne-basicInterpolation">

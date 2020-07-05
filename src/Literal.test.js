@@ -21,7 +21,7 @@ describe('Literal', () => {
 
   test('if Literal throws error for i18nState as null', async () => {
     try {
-      render(I18nLiteral, { i18nState: null })
+      render(I18nLiteral, { props: { i18nState: null } })
       expect(true).toEqual(false)
     } catch (e) {
       expect(e.message).toEqual(

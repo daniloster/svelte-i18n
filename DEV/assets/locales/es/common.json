@@ -1,0 +1,10 @@
+{
+  "PageCommon": {
+    "hello": "[common] [2] Hola Mundo",
+    "interpolation": "[common] [2] Hola Mundo <decorator>{name}</decorator>.",
+    "description": "[common] [2] Este es un ejemplo de interpolación con componentes personalizados. <breakline /> Para obtener más información, puede <action>HAGA CLIC</action>",
+    "action": {
+      "message": "[common] [2] Hola \"{name}\", hiciste clic en el botón"
+    }
+  }
+}

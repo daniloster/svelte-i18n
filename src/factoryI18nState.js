@@ -1,4 +1,4 @@
-import { get, set } from 'mutation-helper'
+import { get } from 'mutation-helper'
 import { noop } from 'svelte/internal'
 import { readable } from 'svelte/store'
 import factoryResolvers from './factoryResolvers'
@@ -18,6 +18,8 @@ function factoryI18nState(options) {
     defaultLocale = getLocale(),
     initialLocale = defaultLocale,
     locales = {},
+    loadingContent,
+    errorContent,
     persistence = { get: noop, set: noop },
   } = options || {}
 
@@ -56,6 +58,7 @@ function factoryI18nState(options) {
         },
       }))
     },
+    resolveNamespace: clearNamespace,
     resolvers: (filename) => {
       const namespace = clearNamespace(filename)
       const initialStateResolvers = factoryResolvers(namespace, state.get())
@@ -74,13 +77,14 @@ function factoryI18nState(options) {
   }
 
   function EmbeddedStateLiteral(config) {
-    const configValues = config || {}
-    const i18nState = get(configValues, 'props.i18nState')
-    const initConfig = set(
-      configValues,
-      'props.i18nState',
-      i18nState || observableState,
-    )
+    const i18nState = get(config, 'props.i18nState')
+    const initConfig = { ...(config || {}) }
+    initConfig.props = {
+      ...initConfig.props,
+      i18nState: i18nState || observableState,
+      ...(loadingContent && { loadingContent }),
+      ...(errorContent && { errorContent }),
+    }
     return new Literal(initConfig)
   }
   observableState.Literal = EmbeddedStateLiteral

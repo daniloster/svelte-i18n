@@ -19,6 +19,14 @@ i18n.init({
   },
 })
 
+function getAppForTestOptions() {
+  return {
+    props: {
+      state: factoryI18nextState({ i18n }),
+    },
+  }
+}
+
 describe('I18n', () => {
   beforeEach(() => {
     i18n.changeLanguage('en')
@@ -69,13 +77,15 @@ describe('I18n', () => {
       },
     })
     i18nState.setLocale('es-ES')
-    const wrapper = render(i18nState.Literal, { path: 'PageOne.hello' })
+    const wrapper = render(i18nState.Literal, {
+      props: { path: 'PageOne.hello' },
+    })
 
     expect(wrapper.container.textContent).toEqual('Holla')
   })
 
   test('if I18n presents the text with initial locale', async () => {
-    const wrapper = render(AppForTest, { isI18n: true })
+    const wrapper = render(AppForTest, getAppForTestOptions())
     /** PageOne */
     const hello = await wrapper.findByText('Hello World')
     expect(hello).toBeTruthy()
@@ -114,8 +124,8 @@ describe('I18n', () => {
   })
 
   test('if I18n changes the texts for pt-BR', async () => {
-    const wrapper = render(AppForTest, { isI18n: true })
-    fireEvent.click(await wrapper.findByText('Portugues'))
+    const wrapper = render(AppForTest, getAppForTestOptions())
+    fireEvent.click(await wrapper.findByText('pt: translation'))
 
     /** PageOne */
     const hello = await wrapper.findByText('Ola Mundo')

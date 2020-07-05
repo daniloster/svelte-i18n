@@ -1,4 +1,5 @@
 const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WorkerPlugin = require('worker-plugin')
 
@@ -67,6 +68,7 @@ module.exports = {
     publicPath: './',
   },
   plugins: [
+    new CopyWebpackPlugin({ patterns: [{ from: 'DEV/assets', to: 'assets' }] }),
     new WorkerPlugin(),
     new HtmlWebpackPlugin({ title: 'Shopping Builder' }),
   ],
