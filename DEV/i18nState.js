@@ -1,4 +1,4 @@
-import factoryI18nState from '../src'
+import factoryI18nState from '@daniloster/svelte-i18n'
 import en from './assets/locales/en'
 import ptBR from './assets/locales/pt-BR'
 

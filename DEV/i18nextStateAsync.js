@@ -1,6 +1,6 @@
+import { factoryI18nextState } from '@daniloster/svelte-i18n'
 import i18n from 'i18next'
 import HttpApi from 'i18next-http-backend'
-import { factoryI18nextState } from '../src'
 
 i18n
   .use(HttpApi)
