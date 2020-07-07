@@ -6,12 +6,17 @@ The usage of `@daniloster/svelte-i18n` is based on some conventions which can sp
 
 ## Importing and using
 
-The library only exposes one function and the configuration has default values set in case they are not provided.
+The library only exposes 2 functions (`factoryI18nState` and `factoryI18nextState`) and the configuration has default values set in case they are not provided.
+
+Here we are starting development with a simple case, the proper lib is taking care of the internationalization. Basically, the look up for the text related to the json path.
 
 _`src/i18nState.js`_
 
 ```js
+// Either
 import factoryI18nState from '@daniloster/svelte-i18n'
+// or
+// import { factoryI18nState } from '@daniloster/svelte-i18n'
 const en = {
   containers: {
     Page: {
@@ -117,7 +122,14 @@ _`src/containers/Page.svelte`_
 <script>
   import { getContext } from 'svelte'
   import Bold from '../Bold.svelte'
-  // for this work, we need webpack to have `exports.module = { node: { filename: true }, ...otherConfigs }
+  /**
+   * Webpack related instruction
+   * - for this work, we need webpack to have `exports.module = { node: { filename: true }, ...otherConfigs }
+   *
+   * i18next related instruction
+   * - i18next also provides namespace concept, in case it is required to use the its feature namespace should
+   * be declared as per: const namespace = `i18next_namespace:${__filename}`
+   * */
   const namespace = __filename
   const Literal = getContext('I18nLiteral')
   const i18nState = getContext('i18n')
@@ -186,33 +198,7 @@ Template literals with `<value>` can get it replaced based on modifiers matching
 ```json
 {
   "App": {
-    "hello": "Hello <name>"
-  }
-}
-```
-
-```html
-<Literal {namespace} path="hello" modifiers="{{ name: '<i>Jane Doe</i>' }}" />
-```
-
-### SvelteComponent interpolations
-
-Template literals with `<value>` can get it replaced based on modifiers matching.
-
-_`src/Bold.svelte`_
-
-```html
-<script>
-  let children = ''
-</script>
-
-{children}
-```
-
-```json
-{
-  "App": {
-    "hello": "Hello <name>"
+    "hello": "Hello <effect>{name}</effect>"
   }
 }
 ```
@@ -221,13 +207,50 @@ _`src/Bold.svelte`_
 <Literal
   {namespace}
   path="hello"
-  modifiers="{{ name: [Bold, { children: 'Jane Doe' }] }}"
+  modifiers="{{ name: 'Jane Doe', effect: { tag: 'i' } }}"
 />
+```
+
+### SvelteComponent interpolations
+
+Template literals with `<effect>some content here {dynamicValue}</effect>` can get it replaced based on modifiers matching.
+
+_`src/Bold.svelte`_
+
+```html
+<script>
+  let weight = 600
+  let children = ''
+</script>
+
+<b>{children}</b> {weight}
+```
+
+```json
+{
+  "App": {
+    "hello": "Hello <SvelteCustomComponent>{name}</SvelteCustomComponent>"
+  }
+}
+```
+
+```html
+<Literal
+  {namespace}
+  path="hello"
+  modifiers="{{ name: 'Jane Doe', SvelteCustomComponent: [Bold, { weight: 900 }] }}"
+/>
+```
+
+The output will be
+
+```html
+<b>Jane Doe</b> 900
 ```
 
 **Note**: Interpolating HTML and SvelteComponent into templates is not sanitized. It is important to Devs to escape dynamic texts before injecting.
 
-## Integrating i18next
+## Integrating i18next [static]
 
 To use the `i18next` the library only require to initialize the i18next and pass to the proper factory `factoryI18nextState`. Once the i18nextState is built, you just need to use like the normal state. Nonetheless, it requires to install the `i18next` dependency as it is peer dependency.
 
@@ -241,7 +264,8 @@ const en = {
     Page: {
       hello: 'Hello {name}.',
       description: 'You are more than welcome.',
-      interpolation: 'In here, we have an interpolation for you, <user>.',
+      interpolation:
+        'In here, we have an interpolation for you, <effect>{user}</effect>.',
       buttonLabel: 'Click',
       buttonTitle: 'Click me',
     },
@@ -252,7 +276,8 @@ const ptBR = {
     Page: {
       hello: 'Ola, {name}.',
       description: 'Vc eh mais do que bem-vindo.',
-      interpolation: 'Aqui, teremos uma interpolacao para vc, <user>.',
+      interpolation:
+        'Aqui, teremos uma interpolacao para vc, <effect>{user}</effect>.',
       buttonLabel: 'Clique',
       buttonTitle: 'Clique me',
     },
@@ -284,13 +309,116 @@ const i18nState = factoryI18nextState({
 export default i18nState
 ```
 
-Description of options for `factoryI18nState`.
+## Integrating i18next [remote]
 
-|    Property    |            Type            |      default       | Description                                                                                                                                                    |
-| :------------: | :------------------------: | :----------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| clearNamespace | `Function(String): String` | :heavy_check_mark: | The default function strips out initials `src/`, `DEV/` or `dist/.app`. Also, strips extensions (`.js`, `.jsx`, `.svelte`) and converts remaining `/` into `.` |
-|      i18n      |         `i18next`          |                    | It is required, and it is the mechanism to resolve messages                                                                                                    |
-|  persistence   |          `Object`          | :heavy_check_mark: | _(`default: { get: noop, set: noop }`)_ The service to get and persist locale changes                                                                          |
+From static usage to remote (fetching resources on demand), the `i18next` the library will need to have the property `load: 'currentOnly'`. In the example below, we are using the `i18next-http-backend` which requires the `loadPath`.
+
+Nonetheless, it requires to install the `i18next` dependency as it is peer dependency.
+
+_`src/i18nextState.js`_
+
+```js
+import { factoryI18nextState } from '@daniloster/svelte-i18n'
+import i18n from 'i18next'
+import HttpApi from 'i18next-http-backend'
+
+i18n
+  .use(HttpApi)
+  .init({
+    // debug: true,
+    fallbackLng: 'en',
+    fallbackNS: 'translation',
+    languages: ['en', 'pt-BR', 'es'],
+    lng: 'en',
+    /**
+     * Important to load only the language required
+     * e.g. loading 'pt-BR', it won't load 'pt'
+     */
+    load: 'currentOnly',
+    backend: {
+      loadPath: '/assets/locales/{{lng}}/{{ns}}.json',
+    },
+  })
+  .then(() => {
+    i18nState.init()
+  })
+
+const i18nState = factoryI18nextState({
+  i18n,
+  errorContent: 'error...',
+  loadingContent: 'loading...',
+  persistence: {
+    get: () => localStorage.getItem('locale'),
+    set: (locale) => localStorage.getItem('locale', locale),
+  },
+})
+
+export default i18nState
+```
+
+## Description of options for `factoryI18nextState`. (i18next)
+
+|    Property    |            Type            |       default       | Description                                                                                                                                                    |
+| :------------: | :------------------------: | :-----------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| clearNamespace | `Function(String): String` | :heavy_check_mark:  | The default function strips out initials `src/`, `DEV/` or `dist/.app`. Also, strips extensions (`.js`, `.jsx`, `.svelte`) and converts remaining `/` into `.` |
+|  errorContent  |          `String`          |    `'error...'`     | Text to be displayed when error happens while fetching resource (this can be overridden at the `Literal` component level)                                      |
+| loadingContent |          `String`          |   `'loading...'`    | Text to be displayed when loading resource (this can be overridden at the `Literal` component level)                                                           |
+|      i18n      |         `i18next`          |                     | It is required, and it is the mechanism to resolve messages                                                                                                    |
+|  persistence   |          `Object`          | :heavy\*check_mark: | \*(`default: { get: noop, set: noop }`)\_ The service to get and persist locale changes                                                                        |
+
+## Integrating i18next - namespace
+
+`svelte-i18n` has a different semantic meaning for namespace when compared to `i18next`. It is not to pick which is correct, both independently are correct.
+
+While `svelte-i18n` uses namespace to not repeat itself to resolve i18n path, `i18next` uses to map subset of data which can be fetched remotely. From the version `svelte-i18n@^1.0.1`, the namespace feature are combined. Follow the example below.
+
+### Solely namespace for svelte-i18n
+
+```jsx
+/**
+ * Webpack related instruction
+ * - for this work, we need webpack to have `exports.module = { node: { filename: true }, ...otherConfigs }
+ * */
+const namespace = __filename
+// Assuming the file is src/container/pages/Home.svelte
+// svelte-i18n will resolve the namespace as "container.pages.Home"
+
+// ...
+
+// this will look after json path: "container.pages.Home.greeting"
+<Literal {namespace} path="greeting" />
+// this will look after json path: "container.pages.Home.description"
+<Literal {namespace} path="description" />
+```
+
+### namespace for svelte-i18n + i18next
+
+```jsx
+/**
+ * Webpack related instruction
+ * - for this work, we need webpack to have `exports.module = { node: { filename: true }, ...otherConfigs }
+ *
+ * i18next related instruction
+ * - i18next also provides namespace concept, in case it is required to use the its feature namespace should
+ * be declared as per: const namespace = `i18next_namespace:${__filename}`
+ *
+ * - For instance, we are using the i18next 'common' namespace + the svelte-i18n namespace to avoid repetition
+ * in the path resolution.
+ *
+ * -When a namespace for i18next is not provided, the library will fallback to the default defined in i18next.
+ * */
+const namespace = `common:${__filename}`
+// Assuming the file is src/container/pages/Home.svelte
+// svelte-i18n will resolve the namespace as "container.pages.Home"
+
+// ...
+
+//                                 [i18nextNamespace, svelteI18nNamespace]
+// this will look after json path: ["common", "container.pages.Home.greeting"]
+<Literal {namespace} path="common:greeting" />
+// this will look after json path: [defaultI18nextNamespace, "container.pages.Home.description"]
+<Literal {namespace} path="description" />
+```
 
 ## Breaking change
 
@@ -423,5 +551,5 @@ Usage inside the PageOne component
 The output will be
 
 ```html
-<b>Amazing</b><br />Mary.
+<b rel="something">Amazing</b><br />Mary.
 ```
