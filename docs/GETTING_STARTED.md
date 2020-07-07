@@ -311,7 +311,7 @@ export default i18nState
 
 ## Integrating i18next [remote]
 
-From static usage to remote (fetching resources on demand), the `i18next` the library will need to have the property `load: 'currentOnly'` as well as the load path.
+From static usage to remote (fetching resources on demand), the `i18next` the library will need to have the property `load: 'currentOnly'`. In the example below, we are using the `i18next-http-backend` which requires the `loadPath`.
 
 Nonetheless, it requires to install the `i18next` dependency as it is peer dependency.
 
