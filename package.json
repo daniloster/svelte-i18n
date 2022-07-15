@@ -57,7 +57,7 @@
     "prettier": "2.0.5",
     "prettier-plugin-svelte": "0.7.0",
     "source-map-support": "0.5.16",
-    "svelte": "3.23.2",
+    "svelte": "3.49.0",
     "svelte-jester": "1.0.6",
     "svelte-loader": "2.13.6",
     "url-loader": "4.1.0",
